@@ -9,7 +9,7 @@ export const Legend: Dictionary<LegendItem> = {
   0: new LegendItem({ id: 0, colour: '#333', solid: false }),
   1: new LegendItem({ id: 1, colour: '#888', solid: false}),
   2: new LegendItem({ id: 2, colour: '#555', solid: true, bounce: 0.35}),
-  3: new LegendItem({ 
+  3: new LegendItem({
     id: 3,
     colour: 'rgba(121, 220, 242, 0.4)', 
     friction: new Velocity(0.9, 0.9), 

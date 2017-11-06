@@ -1,39 +1,34 @@
 import { Velocity } from './Velocity';
-
-class LegendConfig {
-  constructor(
-    public id: number,
-    public bounce: number = 0,
-    public solid: boolean = false,
-    public colour: string = '#333',
-    public jump: boolean = false,
-    public friction: Velocity = new Velocity(0, 0),
-    public gravity: Velocity = new Velocity(0, 0),
-    public fore: boolean = false,
-    public script?: string
-  ) { }
-}
-
 export class LegendItem {
   id: number;
-  bounce: number;
-  solid: boolean;
   colour: string;
+  solid: boolean;
+  bounce: number;
   jump: boolean;
   friction: Velocity;
   gravity: Velocity;
   fore: boolean;
   script?: string;
 
-  constructor(public config: LegendConfig) {
+  constructor(config: {
+    id: number,
+    colour?: string;
+    solid?: boolean;
+    bounce?: number;
+    jump?: boolean;
+    friction?: Velocity;
+    gravity?: Velocity;
+    fore?: boolean;
+    script?: string,
+  }) {
     this.id = config.id;
-    this.bounce = config.bounce;
-    this.solid = config.solid;
-    this.colour = config.colour;
-    this.jump = config.jump;
-    this.friction = config.friction;
-    this.gravity = config.gravity;
-    this.fore = config.fore;
+    this.colour = config.colour || '#333';
+    this.solid = config.solid || false;
+    this.bounce = config.bounce || 0;
+    this.jump = config.jump || false;
+    this.friction = config.friction || new Velocity(0, 0);
+    this.gravity = config.gravity || new Velocity(0, 0);
+    this.fore = config.fore || false;
     this.script = config.script;
-  }
+  } 
 }

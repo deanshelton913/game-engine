@@ -58,30 +58,46 @@ export class Engine {
   }
 
     loadMap(rawMapData: Array<Array<number>>): Map {
+        const {data, size} = this.lookupMapDataInLegend(rawMapData); // TODO: this is gross
         const movementSpeed = { jump: 6, left: 0.3, right: 0.3 };
-        const pSize = new Size(this.currentMap.size.x * this.config.tileSize, this.currentMap.size.y * this.config.tileSize);
+        const pSize = new Size(
+            size.x * this.config.tileSize, 
+            size.y * this.config.tileSize
+        );
         const velocityLimit = new Velocity(2, 16);
         const gravity = new Velocity(0, 0.3);
         const background = '#333';
         const tileSize = 16;
 
-        const parsedMapData = this.lookupMapDataInLegend(rawMapData);
-        const mapConfiguration = new MapConfiguration(movementSpeed, pSize, velocityLimit, rawMapData, this.currentMap.size, gravity, background, tileSize )
+        const mapConfiguration = new MapConfiguration(
+            movementSpeed,
+            pSize,
+            velocityLimit,
+            rawMapData,
+            size,
+            gravity,
+            background, 
+            tileSize
+        );
         const map = new Map(mapConfiguration);
-        map.setData(parsedMapData);
+        map.setData(data);
         return map;
     }
 
   lookupMapDataInLegend(rawMapData: Array<Array<number>>) {
-    let parsedMapData: Array<Array<LegendItem>> = [[]];
+    let parsedMapData: LegendItem[][];
+    let sizeY = 0;
+    let sizeX = 0;
+    parsedMapData = [];
     rawMapData.forEach((row, y) => {
-      this.currentMap.size.y = Math.max(this.currentMap.size.y, y);
+      sizeY = Math.max(sizeY, y);
+      parsedMapData[y] = [];
       row.forEach((column, x) => {
-        this.currentMap.size.x = Math.max(this.currentMap.size.x, x);
+        sizeX = Math.max(sizeX, x);
         parsedMapData[y][x] = Legend[rawMapData[y][x]];
       });
     });
-    return parsedMapData;
+    return {data: parsedMapData, size: new Size(sizeX, sizeY)}; // gross
   }
 
 //   loadMap(map: Map) {
@@ -236,7 +252,7 @@ export class Engine {
     
     this.config.player.velocity.x *= .9;
     
-    if (left1.config.solid || left2.config.solid || right1.config.solid || right2.config.solid) {
+    if (left1.solid || left2.solid || right1.solid || right2.solid) {
 
         /* fix overlap */
         const overlapY = new Coordinate(
@@ -249,7 +265,7 @@ export class Engine {
             yNear2
         );
 
-        while (this.getTile(overlapY).config.solid || this.getTile(overlapX).config.solid) {
+        while (this.getTile(overlapY).solid || this.getTile(overlapX).solid) {
             this.config.player.location.x += 0.1;
         }
 
@@ -306,15 +322,15 @@ export class Engine {
             Math.ceil(this.config.player.location.y / this.config.tileSize)
         ));
 
-        while (tile3.config.solid || tile4.config.solid) {
+        while (tile3.solid || tile4.solid) {
             this.config.player.location.y -= 0.1;
         }
         /* tile bounce */
         
         let bounce = 0;
         
-        if (top1.config.solid && top1.config.bounce > bounce) { bounce = top1.config.bounce; }
-        if (top2.config.solid && top2.config.bounce > bounce) { bounce = top2.config.bounce; }
+        if (top1.solid && top1.bounce > bounce) { bounce = top1.bounce; }
+        if (top2.solid && top2.bounce > bounce) { bounce = top2.bounce; }
         if (bottom1.solid && bottom1.bounce > bounce) { bounce = bottom1.bounce; }
         if (bottom2.solid && bottom2.bounce > bounce) { bounce = bottom2.bounce; }
         
