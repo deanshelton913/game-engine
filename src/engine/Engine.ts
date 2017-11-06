@@ -8,7 +8,7 @@ import { LegendItem } from './LegendItem';
 import { Scripts } from './Scripts';
 import { Legend } from './Legend';
 
-class EngineConfiguration {
+export class EngineConfiguration {
     constructor(
         public alertErrors: boolean,
         public logInfo: boolean,

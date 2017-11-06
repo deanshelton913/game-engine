@@ -3,9 +3,11 @@ import { Coordinate } from './Coordinate';
 import { Velocity } from './Velocity';
 
 export class Player {
-  color: string;
-  location: Coordinate;
-  velocity: Velocity;
-  canJump: boolean;
-  onFloor: boolean;
+  constructor(
+    public color: string,
+    public location: Coordinate,
+    public velocity: Velocity,
+    public canJump: boolean,
+    public onFloor: boolean
+  ) { }
 }
