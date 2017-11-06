@@ -1,11 +1,13 @@
 import { Coordinate } from './Coordinate';
-// import { Velocity } from './Velocity';
+import { Velocity } from './Velocity';
 import { Size } from './Size';
 import { KeyboardSignals } from './KeyboardSignals';
 import { Player } from './Player';
-import { Map } from './Map';
+import { Map, MapConfiguration } from './Map';
 import { LegendItem } from './LegendItem';
 import { Scripts } from './Scripts';
+import { Legend } from './Legend';
+
 class EngineConfiguration {
     constructor(
         public alertErrors: boolean,
@@ -16,13 +18,14 @@ class EngineConfiguration {
         public viewport: Size,
         public camera: Coordinate,
         public key: { left: boolean; right: boolean; up: boolean },
-        public player: Player
+        public player: Player,
     ) { }
 }
 
 export class Engine {
   config: EngineConfiguration;
   currentMap: Map;
+  mapSize: Size;
   private lastTile: LegendItem;
 
   constructor(config: EngineConfiguration) {
@@ -52,6 +55,33 @@ export class Engine {
 
   setViewport(newSize: Size) {
     this.config.viewport = newSize;
+  }
+
+    loadMap(rawMapData: Array<Array<number>>): Map {
+        const movementSpeed = { jump: 6, left: 0.3, right: 0.3 };
+        const pSize = new Size(this.currentMap.size.x * this.config.tileSize, this.currentMap.size.y * this.config.tileSize);
+        const velocityLimit = new Velocity(2, 16);
+        const gravity = new Velocity(0, 0.3);
+        const background = '#333';
+        const tileSize = 16;
+
+        const parsedMapData = this.lookupMapDataInLegend(rawMapData);
+        const mapConfiguration = new MapConfiguration(movementSpeed, pSize, velocityLimit, rawMapData, this.currentMap.size, gravity, background, tileSize )
+        const map = new Map(mapConfiguration);
+        map.setData(parsedMapData);
+        return map;
+    }
+
+  lookupMapDataInLegend(rawMapData: Array<Array<number>>) {
+    let parsedMapData: Array<Array<LegendItem>> = [[]];
+    rawMapData.forEach((row, y) => {
+      this.currentMap.size.y = Math.max(this.currentMap.size.y, y);
+      row.forEach((column, x) => {
+        this.currentMap.size.x = Math.max(this.currentMap.size.x, x);
+        parsedMapData[y][x] = Legend[rawMapData[y][x]];
+      });
+    });
+    return parsedMapData;
   }
 
 //   loadMap(map: Map) {

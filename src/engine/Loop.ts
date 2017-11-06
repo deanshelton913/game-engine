@@ -2,7 +2,9 @@
 import { Engine } from './Engine';
 import { Player } from './Player';
 import { Coordinate } from './Coordinate';
-import * as map from './maps/level.1.map.js';
+import { Size } from './Size';
+import {  } from './MapConfiguration';
+import { levelOne } from './maps/level.1.map.js';
 
 const alertErrors = false;
 const logInfo = false;
@@ -13,10 +15,12 @@ const viewport = new Size(200, 200);
 const camera = new Coordinate(0, 0);
 const key = { left: false, right: false, up: false };
 const player = new Player();
-const canvas = document.getElementById('canvas');
+const canvas = <HTMLCanvasElement> document.getElementById('canvas');
+if(!canvas){ throw 'ERROR. NO CANVAS.' }
 const ctx = canvas.getContext('2d');  
+if(!ctx){ throw 'ERROR. CAN NOT GET CONTEXT.' }
 
-let game = new Engine({
+let engine = new Engine({
     alertErrors,
     logInfo,
     tileSize,
@@ -28,9 +32,10 @@ let game = new Engine({
     player
   }
 );
-game.setViewport(400, 400);
-game.loadMap(map);
-game.limitViewport = true;
+
+engine.setViewport(new Size(400, 400));
+engine.config.limitViewport = true;
+engine.loadMap(levelOne)
   
 export class Loop {
   constructor() {
@@ -38,8 +43,8 @@ export class Loop {
     ctx.fillStyle = '#333';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    game.update();
-    game.draw(ctx);
+    engine.update();
+    engine.draw(ctx);
     
     window.requestAnimationFrame(Loop);
   }
