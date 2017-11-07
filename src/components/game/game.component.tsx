@@ -27,16 +27,17 @@ import { levelOne } from '../../engine/maps/level.1.map.js';
 export class Game extends React.Component {
   canvas: HTMLCanvasElement;
   engine: Engine;
-
-  loop() {
-   const ctx = this.canvas.getContext('2d'); 
-   if (!ctx) { throw 'ERROR. CAN NOT GET CONTEXT.'; }
-      
-   ctx.fillStyle = '#333';
-   ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-      
-   this.engine.update();
-   this.engine.draw(ctx);
+  loop = () => {
+    if (this.canvas) {
+      const ctx = this.canvas.getContext('2d'); 
+      if (!ctx) { throw 'ERROR. CAN NOT GET CONTEXT.'; }
+         
+      ctx.fillStyle = '#333';
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+         
+      this.engine.update();
+      this.engine.draw(ctx);
+    }
   }
   
   componentDidMount() {
@@ -85,7 +86,7 @@ export class Game extends React.Component {
     this.engine.setViewport(new Size(400, 400));
     this.engine.config.limitViewport = true;
     this.engine.loadMap(levelOne);
-
+    
     window.requestAnimationFrame(this.loop);
   }
     
