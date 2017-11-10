@@ -17,7 +17,7 @@ export const Legend: Dictionary<LegendItem> = {
     jump: true, 
     fore: true
   }),
-  4: new LegendItem({ id: 4, colour: '#777', jump: true}),
+  4: new LegendItem({ id: 4, colour: '#777', solid: false, jump: true}),
   5: new LegendItem({ id: 5, colour: '#E373FA', solid: true, bounce: 1.1}),
   6: new LegendItem({ id: 6, colour: '#666', solid: true, bounce: 0}),
   7: new LegendItem({ id: 7, colour: '#73C6FA', solid: false, script: 'change_colour'}),

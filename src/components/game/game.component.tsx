@@ -8,28 +8,13 @@ import { Size } from '../../engine/Size';
 import { Velocity } from '../../engine/Velocity';
 import { levelOne } from '../../engine/maps/level.1.map.js';
 
-// const loop = () => {
-//   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
-//   if (!canvas) { throw 'ERROR. NO CANVAS.'; }
-//   const ctx = canvas.getContext('2d'); 
-//   if (!ctx) { throw 'ERROR. CAN NOT GET CONTEXT.'; }
-  
-//   ctx.fillStyle = '#333';
-//   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-//   engine.update();
-//   engine.draw(ctx);
-// };
-
-// console.log('I AM LOOP');
-// window.requestAnimationFrame(loop);
-
 export class Game extends React.Component {
   canvas: HTMLCanvasElement;
   engine: Engine;
   loop = () => {
     if (this.canvas) {
       const ctx = this.canvas.getContext('2d'); 
+      
       if (!ctx) { throw 'ERROR. CAN NOT GET CONTEXT.'; }
          
       ctx.fillStyle = '#333';
@@ -37,13 +22,18 @@ export class Game extends React.Component {
          
       this.engine.update();
       this.engine.draw(ctx);
+      window.requestAnimationFrame(this.loop);
     }
   }
   
   componentDidMount() {
+    this.canvas.width = 400;
+    this.canvas.height = 400;
+    const TILE_SIZE = 16;
+
     const playerConfig = {
-      color: '#fff',
-      location: new Coordinate(2, 2),
+      color: '#f00',
+      location: new Coordinate(2 * TILE_SIZE, 2 * TILE_SIZE),
       velocity: new Velocity(0, 0),
       canJump: false,
       onFloor: false,
@@ -63,7 +53,7 @@ export class Game extends React.Component {
       tileSize: 16,
       limitViewport: false,
       jumpSwitch: 0,
-      viewport: new Size(200, 200),
+      viewport: new Size(400, 400),
       camera: new Coordinate(0, 0),
       key: { left: false, right: false, up: false },
       player
@@ -83,8 +73,7 @@ export class Game extends React.Component {
     
     this.engine = new Engine(engineConfig);
     
-    this.engine.setViewport(new Size(400, 400));
-    this.engine.config.limitViewport = true;
+    this.engine.config.limitViewport = false;
     this.engine.loadMap(levelOne);
     
     window.requestAnimationFrame(this.loop);
@@ -93,7 +82,7 @@ export class Game extends React.Component {
   render() {
     return (
       <div className="game-component">
-        <canvas id="canvas" ref={(x: HTMLCanvasElement ) => this.canvas = x} />
+        <canvas id="canvas"  ref={(x: HTMLCanvasElement ) => this.canvas = x} />
           <p>
             Use the left, right and up arrow keys to move.
           </p>

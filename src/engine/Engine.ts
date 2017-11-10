@@ -101,48 +101,6 @@ export class Engine {
         return { data: parsedMapData, size: new Size(sizeX, sizeY) }; // gross
     }
 
-    //   loadMap(map: Map) {
-    //         this.currentMap = map;
-    //         this.currentMap.background = map.config.background || '#333';
-    //         this.currentMap.gravity = map.config.gravity || new Velocity({ x: 0, y: 0.3 });
-    //         this.config.tileSize = map.config.tileSize || 16;
-    //         this.currentMap.size.x = 0;
-    //         this.currentMap.size.y = 0;
-
-    //         const self = this;
-
-    //         map.keys.forEach((key) => {
-    //             map.data.forEach((row, y) => {
-    //                 self.currentMap.size.y = Math.max(self.currentMap.size.y, y);
-    //                 row.forEach((tile, x) => {
-    //                     self.currentMap.size.x = Math.max(self.currentMap.size.x, x);
-    //                     if (tile === key.id) {
-    //                         self.currentMap.data[y][x] = key;
-    //                     }
-    //                 });
-    //             });
-    //         });
-
-    //         this.currentMap.pSize.x = this.currentMap.size.x * this.config.tileSize;
-    //         this.currentMap.pSize.y = this.currentMap.size.y * this.config.tileSize;
-
-    //         this.config.player.location.x = map.player.location.x * this.config.tileSize || 0;
-    //         this.config.player.location.y = map.player.location.y * this.config.tileSize || 0;
-    //         this.config.player.color = map.player.color || '#000';
-
-    //         this.config.key.left  = false;
-    //         this.config.key.up    = false;
-    //         this.config.key.right = false;
-
-    //         this.config.camera = new Coordinate({ x: 0, y: 0 });
-
-    //         this.config.player.velocity = new Velocity({ x: 0, y: 0 });
-
-    //         // this.log('Successfully loaded map data.');
-
-    //         return true;
-    //     }
-
     getTile(coorinate: Coordinate) {
         if (this.currentMap.data[coorinate.y] && this.currentMap.data[coorinate.y][coorinate.x]) {
             return this.currentMap.data[coorinate.y][coorinate.x];
@@ -395,6 +353,7 @@ export class Engine {
     }
 
     updatePlayer() {
+
         if (this.config.key.left) {
 
             if (this.config.player.velocity.x > -this.currentMap.velocityLimit.x) {
